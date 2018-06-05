@@ -5,7 +5,7 @@
 .idea
 out
 gen
-.iml
+*.iml
 
 # Log file
 *.log
