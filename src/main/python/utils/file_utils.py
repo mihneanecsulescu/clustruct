@@ -1,4 +1,5 @@
 import os
+import shutil
 
 
 def print_to_file(directory, file_name, text):
@@ -8,5 +9,6 @@ def print_to_file(directory, file_name, text):
 
 
 def create_directory(directory_path):
-    if not os.path.exists(directory_path):
-        os.makedirs(directory_path)
+    if os.path.exists(directory_path):
+        shutil.rmtree(directory_path)
+    os.makedirs(directory_path)

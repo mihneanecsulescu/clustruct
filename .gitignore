@@ -25,4 +25,4 @@ hs_err_pid*
 build/
 .gradle/
 /src/main/python/packages/
-/src/main/python/preprocessedfiles/
+/src/main/python/files/preprocessedfiles/

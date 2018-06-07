@@ -24,7 +24,6 @@ public class PackageStructureComponentImpl extends AbstractProjectComponent impl
     public void projectOpened() {
         File currentDir = new File(myProject.getBasePath()); // current directory
         constructPackagePathByClassLabelMap(currentDir, packagePathByClassLabel);
-        System.out.println("pirz");
     }
 
     private void constructPackagePathByClassLabelMap(File dir, Map<Integer, String> packagePathByClassLabel) {
