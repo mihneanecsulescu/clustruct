@@ -23,7 +23,10 @@ def normalize_text(directory_path, file_name, class_label):
     stemmed = [porter.stem(word) for word in words]
     text = ' '.join(stemmed[1:-1])
 
-    file_utils.print_to_file(PREPROCESSED_FILES_DIRECTORY_PATH, (class_label + file_name).replace('java', 'txt'), text)
+    if class_label != '':
+        file_utils.print_to_file(PREPROCESSED_FILES_DIRECTORY_PATH, (class_label + '-' + file_name).replace('java', 'txt'), text)
+    else:
+        file_utils.print_to_file(PREPROCESSED_FILES_DIRECTORY_PATH, file_name.replace('java', 'txt'), text)
 
 
 def preprocess(new_file_path, packages_path_with_class_label):
@@ -32,7 +35,8 @@ def preprocess(new_file_path, packages_path_with_class_label):
     normalize_text(new_file_containing_directory, new_file_name, '')
 
     for package_path_with_class_label in packages_path_with_class_label:
-        class_label, package_path = package_path_with_class_label[0], package_path_with_class_label[1:]
+        # class_label, package_path = package_path_with_class_label[0], package_path_with_class_label[1:]
+        class_label, package_path = package_path_with_class_label.split('|', 1)
         for file_name in listdir(package_path):
-            if file_name.endswith('.java'):
+            if file_name.endswith('.java') and file_name != new_file_name:
                 normalize_text(package_path, file_name, class_label)

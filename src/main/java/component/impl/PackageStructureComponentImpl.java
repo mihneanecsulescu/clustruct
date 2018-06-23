@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class PackageStructureComponentImpl extends AbstractProjectComponent implements PackageStructureComponent {
 
-    private Map<Integer, String> packagePathByClassLabel = new HashMap<>();
+    private Map<Integer, String> packagePathsByClassLabel = new HashMap<>();
     private AtomicInteger classLabel = new AtomicInteger(0);
 
     protected PackageStructureComponentImpl(Project project) {
@@ -22,16 +22,18 @@ public class PackageStructureComponentImpl extends AbstractProjectComponent impl
 
     @Override
     public void projectOpened() {
-        File currentDir = new File(myProject.getBasePath()); // current directory
-        constructPackagePathByClassLabelMap(currentDir, packagePathByClassLabel);
+        File currentDir = new File(myProject.getBasePath() + "/src/main"); // current directory
+        constructPackagePathByClassLabelMap(currentDir, packagePathsByClassLabel);
     }
 
     private void constructPackagePathByClassLabelMap(File dir, Map<Integer, String> packagePathByClassLabel) {
         try {
             File[] files = dir.listFiles();
             for (File file : files) {
-                if (file.isDirectory() && Arrays.stream(file.list()).anyMatch(f -> f.contains("java"))) {
+                if (file.isDirectory() && Arrays.stream(file.list()).anyMatch(f -> f.contains(".java"))) {
                     packagePathByClassLabel.put(classLabel.incrementAndGet(), file.getCanonicalPath());
+                    constructPackagePathByClassLabelMap(file, packagePathByClassLabel);
+                } else if (file.isDirectory()) {
                     constructPackagePathByClassLabelMap(file, packagePathByClassLabel);
                 }
             }
@@ -40,11 +42,11 @@ public class PackageStructureComponentImpl extends AbstractProjectComponent impl
         }
     }
 
-    public Map<Integer, String> getPackagePathByClassLabel() {
-        return packagePathByClassLabel;
+    public Map<Integer, String> getPackagePathsByClassLabel() {
+        return packagePathsByClassLabel;
     }
 
-    public void setPackagePathByClassLabel(Map<Integer, String> packagePathByClassLabel) {
-        this.packagePathByClassLabel = packagePathByClassLabel;
+    public void setPackagePathsByClassLabel(Map<Integer, String> packagePathsByClassLabel) {
+        this.packagePathsByClassLabel = packagePathsByClassLabel;
     }
 }
